@@ -4,7 +4,7 @@ An implementation of a lexicographic sorting function, along with basic (passing
 
 ## Usage
 - npm install
-- Then open SpecRunner.html in a browser to see the tests pass.
+- Then open test/SpecRunner.html in a browser to see the tests pass.
 
 ## Runtime Analysis
 - Generating the comparator function itself is a quadratic (~O(n^2)) operation, where n is the number of letters in the alphabet.
