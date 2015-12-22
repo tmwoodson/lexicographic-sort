@@ -1,17 +1,23 @@
+
+// Return a custom comparator function to be passed into Array.prototype.sort
 var makeComparator = function(ordering) {
 
   // For each character specified in the ordering, build a map of characters that are greater than it.
   // The result, compMap, is a map of maps.
   var compMap = {};
-  _.each(_.range(ordering.length), function(outerIndex) {
-    var lesserCharacter = ordering.charAt(outerIndex);
-    compMap[lesserCharacter] = {};
-    _.each(_.range(outerIndex + 1, ordering.length), function(innerIndex) {
-      var greaterCharacter = ordering.charAt(innerIndex);
-      compMap[lesserCharacter][greaterCharacter] = true;
-    });
-  });
+  compMap[''] = {}; // empty string is less than any other character
 
+  _.each(_.range(ordering.length), function(index) {
+    var nextChar = ordering.charAt(index);
+
+    // Each key already in the map is less than the current character
+    _.each(compMap, function(map, key) {
+      map[nextChar] = true;
+    });
+    compMap[nextChar] = {};
+  });
+ 
+  // return comparator function
   return function(str1, str2) {
     var highIndex = Math.min(str1.length, str2.length);
     var index = 0;
@@ -32,12 +38,9 @@ var makeComparator = function(ordering) {
       return 0;
     }
  
-    // If they don't, use the comparator map. Empty strings are less than any other character.
-    if ( (compMap[char1].hasOwnProperty(char2) || char1 === '') && char2 !== '') {
-      return -1;
-    }
-    return 1;
-  }
+    // If they don't, use the comparator map.
+    return compMap[char1].hasOwnProperty(char2) ? -1 : 1;
+  };
 };
 
 
